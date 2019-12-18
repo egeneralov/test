@@ -9,28 +9,4 @@ jobs:
 
     steps:
     - name: Run a one-line script
-      run: ps aux
-    - name: archive runner1
-      run: tar czvf runner1.tar.gz /home/runner/runners
-    - name: archive runner2
-      run: tar czvf runner2.tar.gz /opt/runner
-    - name: archive runner
-      run: tar czvf AGMP.tar.gz /opt/AGPM
-
-
-    - uses: actions/upload-artifact@master
-      with:
-        name: run
-        path: runner1.tar.gz
-
-
-    - uses: actions/upload-artifact@master
-      with:
-        name: run
-        path: runner2.tar.gz
-
-    - uses: actions/upload-artifact@master
-      with:
-        name: run
-        path: AGMP.tar.gz
-
+      run: export
