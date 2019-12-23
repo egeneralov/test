@@ -8,20 +8,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: prepare docker daemon
-        run: |
-          apt-get update -q
-          apt-get install -yq qemu-user-static qemu binfmt-support
-          update-binfmts --display
-          mkdir -p ~/.docker/cli-plugins/
-          wget https://github.com/docker/buildx/releases/download/v0.3.1/buildx-v0.3.1.linux-amd64 -O ~/.docker/cli-plugins/docker-buildx
-          chmod a+x ~/.docker/cli-plugins/docker-buildx
-          echo '{"max-concurrent-downloads": 5, "experimental": true}' > /etc/docker/daemon.json
-          systemctl restart docker
-          docker buildx ls
-          docker buildx create --use --name mybuilder
-          docker buildx inspect --bootstrap
-          docker buildx ls
+        - name: Checkout
+          uses: actions/checkout@v1
+        - name: Set up Docker Buildx
+          id: buildx
+          uses: crazy-max/ghaction-docker-buildx@v1
+          with:
+            version: latest
 
-#     - name: Run a one-line script
-#       run: export
+        - name: Run Buildx
+          run: |
+            docker buildx build \
+            --platform linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64,linux/ppc64le,linux/s390x \
+            --output "type=image,push=false" .
